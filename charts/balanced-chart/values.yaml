@@ -1,0 +1,5 @@
+# balanced-chart leans strongly into sane default values.  it may be possible to deploy
+# with few or no values.  Much is built off of the chart name, release name, and/or app
+# version.
+
+domain: foo.com

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "balanced.helpers.name" . }}
+  labels:
+{{ include "balanced.helpers.labels" . | indent 4 }} 
+spec:
+  selector:
+    app.kubernetes.io/name: {{ include "balanced.helpers.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+  ports:
+    - protocol: TCP
+      port: {{ default 8080 ((.Values.service).port) (.Values.port) }}
+      targetPort: {{ default 8080 (.Values.port) }}

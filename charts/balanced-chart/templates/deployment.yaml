@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "balanced.helpers.name" . }}
+  labels:
+{{ include "balanced.helpers.labels" . | indent 4 }}
+spec:
+  replicas: {{ default 3 ((.Values.scaling).replicas) }}
+  selector:
+    matchLabels:
+      app: {{ include "balanced.helpers.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "balanced.helpers.name" . }}
+    spec:
+      containers:
+      - name: {{ default (include "balanced.helpers.name" .) ((.Values.image).name) }}
+        image: {{ default (include "balanced.helpers.name" .) ((.Values.image).repository) }}:{{ default "latest" .Chart.AppVersion ((.Values.image).tag) }}
+        ports:
+        - containerPort: {{ default 8080 (.Values.port) }}
+          {{- if (.Values.image).command }}
+          command: {{ .Values.image.command }}
+          {{- end }}
+          {{- if (.Values.image).args }}
+          args: {{ .Values.image.args }}
+          {{- end }}
+          imagePullPolicy: {{ default "IfNotPresent" ((.Values.image).pullPolicy) }}
+          ports:
+          - name: {{ default "http" (.Values.portName) }}
+            containerPort: {{ default 8080 (.Values.port) }}
+            protocol: TCP
+          {{- with (.Values.additionalPorts) }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
+          envFrom:
+          {{- with (.Values.envFromSecret) }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
+          env:
+          {{- with (.Values.environmentVariables) }}
+          {{- tpl (toYaml .) $ | nindent 10 }}
+          {{- end }}
+          lifecycle:
+            {{- if not (.Values.lifecycleDisabled) }}
+            preStop:
+              exec:
+                {{- if (.Values.lifecycleCommand) }}
+                command: {{ (.Values.lifecycleCommand) }}
+                {{- else }}
+                command: ["/bin/sleep", "{{ default 10 (.Values.lifecycleSleepSeconds) }}"]
+                {{- end }}
+            {{- end }}
+           resources:
+          {{- with (.Values.resources) }}
+          {{ toYaml (.Values.resources) | indent 12 }}
+          {{- end }}
+          volumeMounts:
+          {{- with (.Values.volumeMounts) }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
+      volumes:
+      {{- with (.Values.volumes) }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
+      imagePullSecrets:
+      {{- if (.Values.imagePullSecret) }}
+      - name: {{- (.Values.imagePullSecret) }}
+      {{- end }}

@@ -1,0 +1,27 @@
+{{ if ((.Values.ingress).external.enabled) }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "balanced.helpers.name" . }}-external
+  labels:
+{{ include "balanced.helpers.labels" . | indent 4 }}
+  annotations:
+  {{- with (((.Values.ingress).external).annotations) }}
+  {{ toYaml . | indent 4 }}
+  {{- end }}
+spec:
+  {{- if (((.Values.ingress).external).className) }}
+  ingressClassName: {{- (((.Values.ingress).external).className) }}
+  {{- end }}
+  rules:
+  - host: {{ (include "balanced.helpers.externalHost" .) }}
+    http:
+      paths:
+      - path: {{ default "/" (((.Values.external).ingress).path) | quote }}
+        pathType: {{ default "Prefix" (((.Values.external).ingress).path) | quote }}
+        backend:
+          service:
+            name: {{ default (include "balanced.helpers.name" .) ((.Values.service).name) }}
+            port:
+              number: {{ default 8080 ((.Values.service).port) }}
+{{- end }}

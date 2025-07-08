@@ -1,0 +1,18 @@
+# -- Information about the conainer to run in the deployment
+image:
+  # -- The command does not need to be defined unless the container default needs changed.
+  command:
+  # -- The name used in the chart for the image.
+  name: balanced-chart
+  # -- The repository of the image.
+  repository: adrmaas/mock-app
+  # -- The image tag to use.
+  tag: latest
+
+# -- Set the container port to use. The chart will default to 8080 if not provided
+port:
+
+# -- Scaling information.
+scaling:
+  # -- The number of replicas, the chart default is 3 if not set.
+  replicas: 3

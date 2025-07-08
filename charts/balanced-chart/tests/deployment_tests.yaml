@@ -1,0 +1,65 @@
+suite: Deployment test
+templates:
+- templates/deployment.yaml
+capabilities:
+  majorVersion: 1
+  minorVersion: 30
+tests:
+- it: test for defaults - ssl enabled
+  release:
+    name: balanced-chart
+  set:
+    image.repository: ghcr.io/balanced-chart
+    image.tag: 1.0.1
+    image.pullPolicy: IfNotPresent
+    replicaCount: 3
+    resources:
+      limits:
+        cpu: 0.5
+        memory: 512Mi
+      requests:
+        cpu: 0.25
+        memory: 256Mi
+  asserts:
+  - isKind:
+      of: Deployment
+  - equal:
+      path: metadata.name
+      value: balanced-chart
+  - hasDocuments:
+      count: 1
+  - equal:
+      path: spec.replicas
+      value: 3
+  - isSubset:
+      path: spec.selector.matchLabels
+      content:
+        app.kubernetes.io/name: basic-chart
+        app.kubernetes.io/instance: balanced-chart
+  - isSubset:
+      path: spec.template.metadata.labels
+      content:
+        app.kubernetes.io/name: balanced-chart
+        app.kubernetes.io/instance: balanced-chart
+  - equal:
+      path: spec.template.spec.containers[0].image
+      value: ghcr.io/balanced-chart:1.0.1
+  - equal:
+      path: spec.template.spec.containers[0].imagePullPolicy
+      value: IfNotPresent
+  - contains:
+      path: spec.template.spec.containers[0].ports
+      content:
+        name: http
+        containerPort: 8080
+        protocol: TCP
+  - isSubset:
+      path: spec.template.spec.containers[0].resources.limits
+      content:
+        cpu: 0.5
+        memory: 512Mi
+  - isSubset:
+      path: spec.template.spec.containers[0].resources.requests
+      content:
+        cpu: 0.25
+        memory: 256Mi
