@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: v2
 name: balanced-chart
 version: 0.0.1
 appVersion: v1.0.0

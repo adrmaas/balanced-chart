@@ -11,11 +11,11 @@
 # standard labels: set of common labels applied to all chart resources
 {{- define "balanced.helpers.labels" -}}
 app.kubernetes.io/name: {{ include "balanced.helpers.name" . }}
-helm.sh/chart: {{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ $.Chart.AppVersion }}
-github.com/adrmaas/balanced-chart: v0.0.1
+github.com/adrmaas/balanced-chart: {{ $.Chart.Version }}
+helm.sh/chart: {{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}
 {{- if .Values.labels }}
 {{ toYaml .Values.labels }}
 {{- end }}
