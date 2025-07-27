@@ -2,8 +2,7 @@
 # top-most EditorConfig file
 root = true
 
-# Unix-style newlines, a newline ending every file, indent spaces, indent two spaces
-[*]
+[*.yaml]
 charset = utf-8
 end_of_line = lf
 indent_size = 2

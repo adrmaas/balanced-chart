@@ -1,13 +1,21 @@
 set shell := ["bash", "-uc"]
 
+[private]
 default:
   @just --list
 
 test: requirements
   helm unittest charts/balanced-chart
 
-docs: requirements
+docs: requirements values-markdown json-schema
+
+[private]
+values-markdown:
   helm-docs --values-file doc-values.yaml -s file --output-file VALUES.MD
+
+[private]
+json-schema:
+  helm schema
 
 requirements:
   #!/usr/bin/env bash

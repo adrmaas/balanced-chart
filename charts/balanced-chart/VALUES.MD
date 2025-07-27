@@ -20,7 +20,7 @@ A generic Helm chart applications
 | image.command | string | `nil` | The command does not need to be defined unless the container default needs changed. |
 | image.name | string | `"balanced-chart"` | The name used in the chart for the image. |
 | image.repository | string | `"adrmaas/mock-app"` | The repository of the image. |
-| image.tag | string | `"latest"` | The image tag to use. |
+| image.tag | string | `"latest"` | The image tag to use.  The chart will use .Chart.AppVersion but this can be overridden by defining the image.tag. |
 | port | string | `nil` | Set the container port to use. The chart will default to 8080 if not provided |
 | scaling | object | `{"replicas":3}` | Scaling information. |
 | scaling.replicas | int | `3` | The number of replicas, the chart default is 3 if not set. |

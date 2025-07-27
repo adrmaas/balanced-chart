@@ -6,7 +6,7 @@ image:
   name: balanced-chart
   # -- The repository of the image.
   repository: adrmaas/mock-app
-  # -- The image tag to use.
+  # -- The image tag to use.  The chart will use .Chart.AppVersion but this can be overridden by defining the image.tag.
   tag: latest
 
 # -- Set the container port to use. The chart will default to 8080 if not provided

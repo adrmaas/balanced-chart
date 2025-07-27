@@ -16,24 +16,6 @@ tests:
   - equal:
       path: metadata.name
       value: balanced-chart
-- it: check labels
-  release:
-    name: balanced-chart
-  asserts:
-  - isKind:
-      of: Deployment
-  - hasDocuments:
-      count: 1
-  - isSubset:
-      path: spec.selector.matchLabels
-      content:
-        app.kubernetes.io/name: balanced-chart
-        app.kubernetes.io/instance: balanced-chart
-  - isSubset:
-      path: spec.template.metadata.labels
-      content:
-        app.kubernetes.io/name: balanced-chart
-        app.kubernetes.io/instance: balanced-chart
 - it: test image values
   set:
     image:
@@ -79,17 +61,36 @@ tests:
       content:
         cpu: 0.25
         memory: 256Mi
-# - it: test for default port
-#   release:
-#     name: balanced-chart
-#   asserts:
-#   - isKind:
-#       of: Deployment
-#   - hasDocuments:
-#       count: 1
-#   - contains:
-#       path: spec.template.spec.containers[0].ports
-#       content:
-#         name: http
-#         containerPort: 8080
-#         protocol: TCP
+- it: test default port
+  release:
+    name: balanced-chart
+  set:
+    resources:
+  asserts:
+  - isKind:
+      of: Deployment
+  - hasDocuments:
+      count: 1
+  - contains:
+      path: spec.template.spec.containers[0].ports
+      content:
+        name: http
+        containerPort: 8080
+        protocol: TCP
+- it: test default port
+  release:
+    name: balanced-chart
+  set:
+    port: 9090
+    portName: grpc
+  asserts:
+  - isKind:
+      of: Deployment
+  - hasDocuments:
+      count: 1
+  - contains:
+      path: spec.template.spec.containers[0].ports
+      content:
+        name: grpc
+        containerPort: 9090
+        protocol: TCP

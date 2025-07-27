@@ -1,3 +1,4 @@
+{{/* An internal external ingress must be enabled */}}
 {{ if ((.Values.ingress).external.enabled) }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress

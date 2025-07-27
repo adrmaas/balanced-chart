@@ -1,0 +1,18 @@
+{{/* A prometheus service monitor is created by default */}}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "balanced.helpers.name" . }}
+  labels:
+{{ include "balanced.helpers.labels" . | indent 4 }}
+spec:
+  endpoints:
+  - interval: 30s
+    {{- if ((.Values.metrics).path) }}
+    path: /metrics
+    {{- end }}
+    port: {{ default 8080 (default (.Values.port) ((.Values.metrics).port) ) }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "balanced.helpers.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}

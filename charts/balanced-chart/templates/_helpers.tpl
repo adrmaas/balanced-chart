@@ -39,7 +39,7 @@ helm.sh/chart: {{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}
 {{- if .Values.externalHostOverride }}
 {{- $externalHost := default .Values.externalHostOverride }}
 {{- else -}}
-{{- if not (has .Values.domain) }}
+{{- if not ( .Values.domain) }}
 {{- fail "the value domain is not defined" }}
 {{- else }}
 {{- printf "%s.%s" (include "balanced.helpers.name" .) (.Values.domain) -}}
