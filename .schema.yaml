@@ -1,0 +1,23 @@
+# configuration for the helm values schema json plugin which generates values.schema.json files from
+# from specifically formated helm values files.  To install the plugin via helm:
+# helm plugin install https://github.com/losisin/helm-values-schema-json.git
+# For more information at https://github.com/losisin/helm-values-schema-json
+values:
+- charts/balanced-chart/doc-values.yaml
+
+draft: 2020
+indent: 2
+output: charts/balanced-chart/values.schema.json
+
+k8sSchemaURL: https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/{{ .K8sSchemaVersion }}/
+k8sSchemaVersion: "v1.33.1"
+
+#bundleWithoutID: true
+
+useHelmDocs: true
+
+schemaRoot:
+  additionalProperties: false
+  description: schema for balanced-chart values
+  id: https://github.com/adrmaas/balanced-chart/blob/charts/balanced-chart/values.schema.json
+  title: Balanced Chart Values Schema

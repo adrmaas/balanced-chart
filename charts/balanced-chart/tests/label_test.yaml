@@ -1,0 +1,36 @@
+suite: Label tests
+templates:
+- templates/*.yaml
+capabilities:
+  majorVersion: 1
+  minorVersion: 28
+tests:
+- it: check labels
+  chart:
+    version: 9.9.9
+    appVersion: 8.8.8
+  release:
+    name: balanced-chart
+  set:
+    domain: test.local
+    hpa.enabled: true
+    ingress.external.enabled: true
+  asserts:
+  # - isKind:
+  #     of: Deployment
+  # - hasDocuments:
+  #     count: 1
+  # - isSubset:
+  #     path: spec.selector.matchLabels
+  #     content:
+  #       app.kubernetes.io/name: balanced-chart
+  #       app.kubernetes.io/instance: balanced-chart
+  - isSubset:
+      path: metadata.labels
+      content:
+        app.kubernetes.io/name: balanced-chart
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/instance: balanced-chart
+        app.kubernetes.io/version: 8.8.8
+        github.com/adrmaas/balanced-chart: 9.9.9
+        helm.sh/chart: balanced-chart-9.9.9

@@ -1,0 +1,13 @@
+# balanced-chart leans strongly into sane default values.  it may be possible to deploy
+# with few or no values.  Much is built off of the chart name, release name, and/or app
+# version.
+
+domain: foo.com
+
+resources:
+  limits:
+    cpu: 0.5
+    memory: 512Mi
+  requests:
+    cpu: 0.25
+    memory: 256Mi
