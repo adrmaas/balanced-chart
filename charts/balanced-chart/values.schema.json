@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/adrmaas/balanced-chart/blob/charts/balanced-chart/values.schema.json",
+  "title": "Balanced Chart Values Schema",
+  "description": "schema for balanced-chart values",
+  "type": "object",
+  "properties": {
+    "image": {
+      "description": "Information about the conainer to run in the deployment",
+      "type": "object",
+      "properties": {
+        "command": {
+          "description": "The command does not need to be defined unless the container default needs changed.",
+          "type": "null"
+        },
+        "name": {
+          "description": "The name used in the chart for the image.",
+          "type": "string"
+        },
+        "repository": {
+          "description": "The repository of the image.",
+          "type": "string"
+        },
+        "tag": {
+          "description": "The image tag to use.  The chart will use .Chart.AppVersion but this can be overridden by defining the image.tag.",
+          "type": "string"
+        }
+      }
+    },
+    "port": {
+      "description": "Set the container port to use. The chart will default to 8080 if not provided",
+      "type": "null"
+    },
+    "scaling": {
+      "description": "Scaling information.",
+      "type": "object",
+      "properties": {
+        "replicas": {
+          "description": "The number of replicas, the chart default is 3 if not set.",
+          "type": "integer"
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}
